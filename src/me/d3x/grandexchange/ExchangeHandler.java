@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import me.d3x.grandexchange.GrandExchange;
 import me.d3x.grandexchange.command.BaseCommand;
 
 public class ExchangeHandler implements Listener{
@@ -34,10 +35,9 @@ public class ExchangeHandler implements Listener{
 		return result;
 	}
 	
+    private GrandExchange ge;
 	private HashMap<String, BaseCommand> commands;
-	private ArrayList<BaseCommand> alphabetizedCommands = null;
-	
-	public ExchangeHandler() {}
+	private ArrayList<BaseCommand> alphabetizedCommands = null;    	
 	
 	public HashMap<String, BaseCommand> initializeFromJar(String jarPath, String cmdDir){
 		HashMap<String, BaseCommand> objects = new HashMap<String, BaseCommand>();
@@ -62,7 +62,8 @@ public class ExchangeHandler implements Listener{
 	}
 	
 	
-	public void loadCommands() {
+	public void loadCommands(GrandExchange ge) {
+        this.ge = ge;
 		this.commands = initializeFromJar("plugins/GrandExchange.jar", "me/d3x/grandexchange/command/commands");
 		GrandExchange.print("Loaded commands...");
 	}
@@ -114,5 +115,9 @@ public class ExchangeHandler implements Listener{
 	public HashMap<String, BaseCommand> getCommands(){
 		return this.commands;
 	}
+    
+    public GrandExchange getGrandExchange(){
+        return this.ge;
+    }
 
 }

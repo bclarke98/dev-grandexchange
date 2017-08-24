@@ -12,13 +12,15 @@ import me.d3x.grandexchange.command.BaseCommand;
 import me.d3x.grandexchange.engine.TradeManager;
 import net.md_5.bungee.api.ChatColor;
 
+import org.bukkit.Material;
+
 public class GrandExchange extends JavaPlugin{
 	
 	
 	@Override
 	public void onEnable() {
 		loadDataFromFiles();
-		ExchangeHandler.getInstance().loadCommands();
+		ExchangeHandler.getInstance().loadCommands(this);
 		ExchangeHandler.getInstance().alphabetizedCommands();
 		getServer().getPluginManager().registerEvents(ExchangeHandler.getInstance(), this);
 		for(BaseCommand c : ExchangeHandler.getInstance().getCommands().values()) {
@@ -48,18 +50,18 @@ public class GrandExchange extends JavaPlugin{
 			getDataFolder().mkdir();
 			print("Created data folder...");
 		}
-		File tradeFolder = new File(getDataFolder() + "\\trade");
+		File tradeFolder = new File(getDataFolder() + "/trade");
 		if (!tradeFolder.exists()) {
 			tradeFolder.mkdir();
 			print("Created trade folder");
 		}
 		try {
-			File tradeData = new File(getDataFolder() + "\\trade\\trades.dat");
+			File tradeData = new File(getDataFolder() + "/trade/trades.dat");
 			if(!tradeData.exists()) {
 				tradeData.createNewFile();
 				PrintWriter writer = new PrintWriter(tradeData, "UTF-8");
-				for(int i = 1; i < 452; i++) {
-					writer.write(";" + i + "\n\n");
+				for(Material mat : Material.values()) {
+					writer.write(";" + mat + "\n\n");
 				}
 				writer.flush();
 				writer.close();
