@@ -1,0 +1,7 @@
+.externalToolBuilders/
+.git/
+.settings/
+bin/
+export/
+*.classpath
+*.project
