@@ -1,21 +1,23 @@
 package me.d3x.grandexchange;
 
+import java.io.File;
+import java.io.PrintWriter;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_12_R1.command.ColouredConsoleSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.d3x.grandexchange.command.BaseCommand;
+import me.d3x.grandexchange.engine.TradeManager;
+import net.md_5.bungee.api.ChatColor;
 
 public class GrandExchange extends JavaPlugin{
 	
-	public static void print(Object... args) {
-		String s = "[GrandExchange] ";
-		for(Object o : args) { s += o; }
-		System.out.println(s);
-	}
 	
 	@Override
 	public void onEnable() {
+		loadDataFromFiles();
 		ExchangeHandler.getInstance().loadCommands();
 		ExchangeHandler.getInstance().alphabetizedCommands();
 		getServer().getPluginManager().registerEvents(ExchangeHandler.getInstance(), this);
@@ -32,6 +34,41 @@ public class GrandExchange extends JavaPlugin{
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		return ExchangeHandler.getInstance().handleCommand(sender, command, label, args);
+	}
+	
+	public static void print(Object... args) {
+		String s = ChatColor.DARK_GREEN + "[" + ChatColor.GOLD + "GrandExchange" + ChatColor.DARK_GREEN + "] " + ChatColor.GREEN;
+		for(Object o : args) { s += o; }
+		ColouredConsoleSender.getInstance().sendMessage(s);
+	}
+	
+	private void loadDataFromFiles() {
+		print("Loading trade data...");
+		if(!getDataFolder().exists()) {
+			getDataFolder().mkdir();
+			print("Created data folder...");
+		}
+		File tradeFolder = new File(getDataFolder() + "\\trade");
+		if (!tradeFolder.exists()) {
+			tradeFolder.mkdir();
+			print("Created trade folder");
+		}
+		try {
+			File tradeData = new File(getDataFolder() + "\\trade\\trades.dat");
+			if(!tradeData.exists()) {
+				tradeData.createNewFile();
+				PrintWriter writer = new PrintWriter(tradeData, "UTF-8");
+				for(int i = 1; i < 452; i++) {
+					writer.write(";" + i + "\n\n");
+				}
+				writer.flush();
+				writer.close();
+				print("Created trades.dat");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		TradeManager.getInstance().loadTradeMapFromFile(this);
 	}
 
 }
