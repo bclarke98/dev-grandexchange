@@ -3,5 +3,8 @@
 .settings/
 bin/
 export/
+build/
 *.classpath
 *.project
+*.sh
+l-build.xml
