@@ -83,4 +83,8 @@ public class TradeManager {
         }
 		
 	}
+	
+	public GrandExchange getGrandExchange() {
+		return ge;
+	}
 }

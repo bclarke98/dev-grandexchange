@@ -8,10 +8,12 @@ import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -110,6 +112,13 @@ public class ExchangeHandler implements Listener{
 	@EventHandler 
 	public void onPlayerMove(PlayerMoveEvent event){
 		
+	}
+	
+	@EventHandler 
+	public void onPlayerClickInventory(InventoryClickEvent event){
+		if(event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)) {
+			System.out.println(event.getCurrentItem().getType());
+		}
 	}
 	
 	public HashMap<String, BaseCommand> getCommands(){
