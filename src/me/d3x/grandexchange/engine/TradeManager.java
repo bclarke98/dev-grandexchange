@@ -75,6 +75,7 @@ public class TradeManager {
         Trade newTrade = new Trade(uid, quantity, price, type);
         ArrayList<Trade> potentialTrades = tradeMap.get(itemname).get((type + 1) % 2);
         if(potentialTrades.size() > 0 && potentialTrades.get(0).canCompleteTrade(newTrade)){
+            GrandExchange.print("Found potential trade...");
             //handle processing trade
         }else{
 		    tradeMap.get(itemname).get(type).add(newTrade);
