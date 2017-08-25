@@ -30,7 +30,7 @@ public class GrandExchange extends JavaPlugin{
 	
 	@Override
 	public void onDisable() {
-		
+		saveDataToFiles();
 	}
 	
 	@Override
@@ -72,5 +72,9 @@ public class GrandExchange extends JavaPlugin{
 		}
 		TradeManager.getInstance().loadTradeMapFromFile(this);
 	}
+    
+    private void saveDataToFiles(){
+        TradeManager.getInstance().saveTradeMapToFile(this);
+    }
 
 }

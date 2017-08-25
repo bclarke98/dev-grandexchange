@@ -84,6 +84,10 @@ public class TradeManager {
         }
 		
 	}
+
+    public void saveTradeMapToFile(GrandExchange ge){
+        
+    }
 	
 	public GrandExchange getGrandExchange() {
 		return ge;
