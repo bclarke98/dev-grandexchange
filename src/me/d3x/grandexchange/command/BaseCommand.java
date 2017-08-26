@@ -4,12 +4,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import me.d3x.grandexchange.ExchangeHandler;
+import me.d3x.grandexchange.ExchangeHandler.ChatHandler;
+
 public abstract class BaseCommand implements Listener{
 
 	private String name;
+	private ChatHandler chatHandler;
 	
 	public BaseCommand(String name) {
 		this.name = name;
+		this.chatHandler = ExchangeHandler.getInstance().getChatHandler();
 	}
 	
 	/** 
@@ -26,16 +31,16 @@ public abstract class BaseCommand implements Listener{
 	}
 	
 	public void sendMessageTo(CommandSender target, String message) {
-		target.sendMessage("\2472[\2476Grand Exchange\2472]:\247a " + message);
+		target.sendMessage(this.chatHandler.chatPrefix() + message);
 	}
 	
 	public void sendErrorTo(CommandSender target, String message) {
-		sendMessageTo(target, "\2474[\247cError\2474]:\247c " + message);
+		sendMessageTo(target,this.chatHandler.errorPrefix() + message);
 	}
 	
 	public void paramError(CommandSender target) {
 		sendErrorTo(target, "Invalid amount of parameters.");
-		sendMessageTo(target, "\2475[\247dUsage\2475]:\247f " + getHelp());
+		sendMessageTo(target, this.chatHandler.usagePrefix() + getHelp());
 	}
 	
 	public abstract void onPlayerCommand(CommandSender sender, String[] args);

@@ -1,6 +1,5 @@
 package me.d3x.grandexchange.command.commands;
 
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import me.d3x.grandexchange.command.BaseCommand;
@@ -19,7 +18,7 @@ public class CommandBuy extends BaseCommand{
         if(args.length == 4) {
             Player player = (Player) sender;
             //validate that player has enough money for purchase
-            TradeManager.getInstance().registerTrade(args[1].toUpperCase(), player.getUniqueId().toString(), Integer.parseInt(args[2]), Integer.parseInt(args[3]), 0);
+            TradeManager.getInstance().registerTrade(args[1].toUpperCase(), player.getUniqueId().toString(), Integer.parseInt(args[2]), Double.parseDouble(args[3]), 0);
         }else {
             paramError(sender);
         }
@@ -27,7 +26,7 @@ public class CommandBuy extends BaseCommand{
 
     @Override
     public String getParams() {
-        return "[itemname] [quantity] [price]";
+        return "[itemname] [quantity] [unit price]";
     }
 
 

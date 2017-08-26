@@ -55,22 +55,26 @@ public class GrandExchange extends JavaPlugin{
 			tradeFolder.mkdir();
 			print("Created trade folder");
 		}
-		try {
-			File tradeData = new File(getDataFolder() + "/trade/trades.dat");
-			if(!tradeData.exists()) {
-				tradeData.createNewFile();
-				PrintWriter writer = new PrintWriter(tradeData, "UTF-8");
-				for(Material mat : Material.values()) {
-					writer.write(";" + mat + "\n\n");
-				}
-				writer.flush();
-				writer.close();
-				print("Created trades.dat");
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		loadTrades(false);
 		TradeManager.getInstance().loadTradeMapFromFile(this);
+	}
+	
+	public void loadTrades(boolean override) {
+	    try {
+            File tradeData = new File(getDataFolder() + "/trade/trades.dat");
+            if(!tradeData.exists() || override) {
+                tradeData.createNewFile();
+                PrintWriter writer = new PrintWriter(tradeData, "UTF-8");
+                for(Material mat : Material.values()) {
+                    writer.write(";" + mat + "\n\n");
+                }
+                writer.flush();
+                writer.close();
+                print("Created trades.dat");
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
 	}
     
     private void saveDataToFiles(){

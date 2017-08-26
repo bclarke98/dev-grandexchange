@@ -1,6 +1,5 @@
 package me.d3x.grandexchange.command.commands;
 
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -9,7 +8,6 @@ import org.bukkit.entity.Player;
 import me.d3x.grandexchange.GrandExchange;
 import me.d3x.grandexchange.ExchangeHandler;
 import me.d3x.grandexchange.command.BaseCommand;
-import me.d3x.grandexchange.engine.TradeManager;
 
 public class CommandForce extends BaseCommand{
 

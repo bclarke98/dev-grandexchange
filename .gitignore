@@ -1,5 +1,6 @@
 .externalToolBuilders/
 .git/
+.idea/
 .settings/
 bin/
 export/
@@ -8,3 +9,4 @@ build/
 *.project
 *.sh
 l-build.xml
+

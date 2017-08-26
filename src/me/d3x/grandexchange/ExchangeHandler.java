@@ -5,24 +5,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import me.d3x.grandexchange.GrandExchange;
 import me.d3x.grandexchange.command.BaseCommand;
 
 public class ExchangeHandler implements Listener{
 	
 	private static volatile ExchangeHandler instance;
+	private ChatHandler chatHandler;
 	
 	public static ExchangeHandler getInstance(){
 		ExchangeHandler result = instance;
@@ -39,7 +40,11 @@ public class ExchangeHandler implements Listener{
 	
     private GrandExchange ge;
 	private HashMap<String, BaseCommand> commands;
-	private ArrayList<BaseCommand> alphabetizedCommands = null;    	
+	private ArrayList<BaseCommand> alphabetizedCommands = null;
+	
+	public ExchangeHandler() {
+		this.chatHandler = new ChatHandler();
+	}
 	
 	public HashMap<String, BaseCommand> initializeFromJar(String jarPath, String cmdDir){
 		HashMap<String, BaseCommand> objects = new HashMap<String, BaseCommand>();
@@ -116,9 +121,9 @@ public class ExchangeHandler implements Listener{
 	
 	@EventHandler 
 	public void onPlayerClickInventory(InventoryClickEvent event){
-		if(event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)) {
-			System.out.println(event.getCurrentItem().getType());
-		}
+		//if(event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)) {
+		//	System.out.println(event.getCurrentItem().getType());
+		//}
 	}
 	
 	public HashMap<String, BaseCommand> getCommands(){
@@ -127,6 +132,39 @@ public class ExchangeHandler implements Listener{
     
     public GrandExchange getGrandExchange(){
         return this.ge;
+    }
+    
+    public Player getPlayerByUUID(UUID uuid) {
+    	return this.getGrandExchange().getServer().getPlayer(uuid);
+    }
+    
+    public ChatHandler getChatHandler() {
+    	return this.chatHandler;
+    }
+    
+    
+    public class ChatHandler{
+    	
+    	public String chatPrefix() {
+    		return "\2472[\2476Grand Exchange\2472]:\247a ";
+    	}
+    	
+    	public String errorPrefix() {
+    		return "\\2474[\\247cError\\2474]:\\247c ";
+    	}
+    	
+    	public String usagePrefix() {
+    		return "\2472[\2476Grand Exchange\2472]:\247a ";
+    	}
+    	
+    	public void sendChatMessage(Player player, String message) {
+            player.sendMessage(chatPrefix() + message);
+        }
+    	
+    	public void sendChatMessage(UUID uuid, String message) {
+            getPlayerByUUID(uuid).sendMessage(chatPrefix() + message);
+        }
+    	
     }
 
 }
