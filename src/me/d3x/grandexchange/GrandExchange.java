@@ -9,7 +9,7 @@ import org.bukkit.craftbukkit.v1_12_R1.command.ColouredConsoleSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.d3x.grandexchange.command.BaseCommand;
-import me.d3x.grandexchange.engine.TradeManager;
+import me.d3x.grandexchange.trade.TradeManager;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Material;

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.d3x.grandexchange.command.BaseCommand;
-import me.d3x.grandexchange.engine.TradeManager;
+import me.d3x.grandexchange.trade.TradeManager;
 
 public class CommandSell extends BaseCommand{
 	

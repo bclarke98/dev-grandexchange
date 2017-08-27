@@ -1,4 +1,4 @@
-package me.d3x.grandexchange.engine;
+package me.d3x.grandexchange.trade;
 
 import java.util.UUID;
 

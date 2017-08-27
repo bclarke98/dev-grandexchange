@@ -5,7 +5,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import me.d3x.grandexchange.command.BaseCommand;
-import me.d3x.grandexchange.engine.TradeManager;
+import me.d3x.grandexchange.trade.TradeManager;
 
 public class CommandList extends BaseCommand{
 

@@ -3,7 +3,7 @@ package me.d3x.grandexchange.command.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import me.d3x.grandexchange.command.BaseCommand;
-import me.d3x.grandexchange.engine.TradeManager;
+import me.d3x.grandexchange.trade.TradeManager;
 
 public class CommandBuy extends BaseCommand{
 

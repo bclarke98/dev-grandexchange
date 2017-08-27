@@ -1,4 +1,4 @@
-package me.d3x.grandexchange.engine;
+package me.d3x.grandexchange.trade;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -29,15 +29,6 @@ public class TradeManager {
 
     private HashMap<String, ArrayList<ArrayList<Trade>>> tradeMap;
     private GrandExchange ge;
-
-    /**
-     * trades.dat format:
-     * 
-     * ;[itemid] >[uid]|[price]|[quantity]|[buy/sell]
-     * >[uid]|[price]|[quantity]|[buy/sell] \n ;[itemid]
-     * >[uid]|[price]|[quantity]|[buy/sell] >[uid]|[price]|[quantity]|[buy/sell]
-     * >[uid]|[price]|[quantity]|[buy/sell] \n
-     */
 
     public void loadTradeMapFromFile(GrandExchange ge) {
         this.ge = ge;
@@ -83,22 +74,12 @@ public class TradeManager {
                 potentialTrades.remove(0);
             }
             for(int i = 0; i < 2; i++) {
-                Collections.sort(tradeMap.get(itemName).get(i), new Comparator<Trade>() {
-                    @Override
-                    public int compare(Trade t1, Trade t2) {
-                        return t1.compareTo(t2);
-                    }
-                });
+                tradeMap.get(itemName).get(i).sort((Trade t1, Trade t2)->t1.compareTo(t2));
             }
         } else {
             tradeMap.get(itemName).get(type).add(newTrade);
             GrandExchange.print("Added trade " + (type == 0 ? "[BUY]" : "[SELL]") + " [" + itemName + "]: U[" + uid + "] Q[" + quantity + "] P[" + price + "]");
-            Collections.sort(tradeMap.get(itemName).get(type), new Comparator<Trade>() {
-                @Override
-                public int compare(Trade t1, Trade t2) {
-                    return t1.compareTo(t2);
-                }
-            });
+            tradeMap.get(itemName).get(type).sort((Trade t1, Trade t2)->t1.compareTo(t2));
         }
 
     }
