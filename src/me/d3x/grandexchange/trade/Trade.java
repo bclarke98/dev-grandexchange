@@ -5,11 +5,10 @@ import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import me.d3x.grandexchange.ExchangeHandler;
-
 public class Trade {
 	
 	private String sellerUID;
+	private String itemName;
 	private int quantity;
 	private int originalQuantity;
 	private double price;
@@ -17,8 +16,9 @@ public class Trade {
 	private int type;
 	private UUID uuid;
     
-	public Trade(String sellerUID, int quantity, double unitPrice, int type) {
+	public Trade(String sellerUID, String itemName, int quantity, double unitPrice, int type) {
 		this.sellerUID = sellerUID;
+		this.itemName = itemName;
 		this.quantity = quantity;
 		this.originalQuantity = quantity;
 		this.price = unitPrice * quantity;
@@ -29,6 +29,10 @@ public class Trade {
 
 	public String getSellerUID() {
 		return sellerUID;
+	}
+	
+	public String getItemName() {
+	    return this.itemName;
 	}
     
     public UUID getUUID(){
@@ -55,15 +59,12 @@ public class Trade {
                 items[i] = itemsLeft > 64 ? new ItemStack(Material.getMaterial(itemName), 64) : new ItemStack(Material.getMaterial(itemName), itemsLeft);
                 itemsLeft -= 64;
             }
-            ExchangeHandler.getInstance().getPlayerByUUID(getUUID()).getInventory().addItem(items);
             double offset = this.getUnitPrice() - other.getUnitPrice();
             double excess = offset * delta;
-            double buyPrice = (this.getUnitPrice() * delta) - ((excess > 0) ? excess : 0);
-            ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getUUID(), "You have bought " + delta + " " + itemName  + " for " + buyPrice);
-            //player.addMoney(excess);
+            //double buyPrice = (this.getUnitPrice() * delta) - ((excess > 0) ? excess : 0);
+            TradeManager.getInstance().addNewCollectableTrade(this.sellerUID, itemName, items, excess);
         }else {
-            //pay the man
-            ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getUUID(), "You have sold " + delta + " " + itemName + " for " + (this.getUnitPrice() * delta));
+            TradeManager.getInstance().addNewCollectableTrade(this.sellerUID, itemName, null, this.getUnitPrice() * delta);
         }
         if(this.quantity > 0) {
             this.originalQuantity = this.quantity;

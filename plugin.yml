@@ -5,5 +5,5 @@ author: OverlySalty
 description: Player-to-Player exchange service based off of the RuneScape Grand Exchange
 commands:
   ge:
-    description: interact with grand exchange commands
-    usage: /ge [command] [args...]
+    description: opens Grand Exchange interface
+    usage: /ge

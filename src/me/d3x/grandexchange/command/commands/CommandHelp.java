@@ -3,6 +3,7 @@ package me.d3x.grandexchange.command.commands;
 import org.bukkit.command.CommandSender;
 
 import me.d3x.grandexchange.ExchangeHandler;
+import me.d3x.grandexchange.command.AdminCommand;
 import me.d3x.grandexchange.command.BaseCommand;
 
 public class CommandHelp extends BaseCommand{
@@ -24,7 +25,9 @@ public class CommandHelp extends BaseCommand{
 			}
 		}else {
 			for (BaseCommand c : ExchangeHandler.getInstance().getAlphabetizedCommands()) {
-				sendMessageTo(sender, c.getHelp());
+				if(!(c instanceof AdminCommand)) {
+				    sendMessageTo(sender, c.getHelp());
+				}
 			}
 		}
 	}

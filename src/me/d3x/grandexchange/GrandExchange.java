@@ -16,7 +16,6 @@ import org.bukkit.Material;
 
 public class GrandExchange extends JavaPlugin{
 	
-	
 	@Override
 	public void onEnable() {
 		loadDataFromFiles();
@@ -71,6 +70,11 @@ public class GrandExchange extends JavaPlugin{
                 writer.flush();
                 writer.close();
                 print("Created trades.dat");
+            }
+            File collectionsData = new File(getDataFolder() + "/trade/collections.dat");
+            if(!collectionsData.exists()) {
+                collectionsData.createNewFile();
+                print("Created collections.dat");
             }
         }catch(Exception e) {
             e.printStackTrace();

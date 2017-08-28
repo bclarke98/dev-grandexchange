@@ -4,10 +4,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import me.d3x.grandexchange.command.AdminCommand;
 import me.d3x.grandexchange.command.BaseCommand;
 import me.d3x.grandexchange.trade.TradeManager;
 
-public class CommandWipe extends BaseCommand{
+public class CommandWipe extends BaseCommand implements AdminCommand{
 
     public CommandWipe(String name) {
         super(name);
@@ -30,7 +31,7 @@ public class CommandWipe extends BaseCommand{
  
     @Override
     public String getParams() {
-        return "[username] [command] [args]";
+        return "";
     }
 
 
