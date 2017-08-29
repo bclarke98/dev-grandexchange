@@ -4,11 +4,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import me.d3x.grandexchange.command.AdminCommand;
+import me.d3x.grandexchange.command.ConsoleCommand;
 import me.d3x.grandexchange.command.BaseCommand;
 import me.d3x.grandexchange.trade.TradeManager;
 
-public class CommandWipe extends BaseCommand implements AdminCommand{
+public class CommandWipe extends BaseCommand implements ConsoleCommand{
 
     public CommandWipe(String name) {
         super(name);

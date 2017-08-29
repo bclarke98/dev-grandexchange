@@ -10,12 +10,12 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import me.d3x.grandexchange.ExchangeHandler;
 import me.d3x.grandexchange.GrandExchange;
 
 public class TradeManager {
     
-    //TODO create CommandCancel and CommandCollect
-    //TODO check collectionsMap on player login
+    //TODO create CommandCancel
     //TODO save/load collectionsMap
 
     private static volatile TradeManager instance;
@@ -73,7 +73,10 @@ public class TradeManager {
         
         try {
             collectableTradeMap = new HashMap<String, ArrayList<CollectableTrade>>();
-            //handle collections
+            File collectionsData = new File(ge.getDataFolder() + "/trade/collections.dat");
+            Scanner reader = new Scanner(collectionsData);
+            
+            reader.close();
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -92,7 +95,7 @@ public class TradeManager {
             newTrade.reduceQuantity(potentialTrades.get(0), itemName);
             if (newTrade.getQuantity() > 0) {
                 tradeMap.get(itemName).get(type).add(newTrade);
-                addPlayerTrade(uid, newTrade);
+                addPlayerTrade(uid, newTrade, true);
                 GrandExchange.print("Added trade " + (type == 0 ? "[BUY]" : "[SELL]") + " [" + itemName + "]: U[" + uid + "] Q[" + newTrade.getQuantity() + "] P[" + price + "]");
             }
             potentialTrades.get(0).reduceQuantity(newTrade, itemName);
@@ -104,8 +107,9 @@ public class TradeManager {
             }
         } else {
             tradeMap.get(itemName).get(type).add(newTrade);
-            addPlayerTrade(uid, newTrade);
+            addPlayerTrade(uid, newTrade, true);
             GrandExchange.print("Added trade " + (type == 0 ? "[BUY]" : "[SELL]") + " [" + itemName + "]: U[" + uid + "] Q[" + quantity + "] P[" + price + "]");
+            
             tradeMap.get(itemName).get(type).sort((Trade t1, Trade t2)->t1.compareTo(t2));
         }
 
@@ -132,6 +136,22 @@ public class TradeManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            File collectionsData = new File(ge.getDataFolder() + "/trade/collections.dat");
+            PrintWriter writer = new PrintWriter(collectionsData, "UTF-8");
+            int totalCollections = 0;
+            for(ArrayList<CollectableTrade> arr : collectableTradeMap.values()) {
+                for(CollectableTrade ct : arr) {
+                    writer.write(ct.getPrinted() + "\n");
+                    totalCollections++;
+                }
+            }
+            writer.flush();
+            writer.close();
+            GrandExchange.print("Total collectable trades saved: " + totalCollections);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void resetTrades() {
@@ -153,12 +173,20 @@ public class TradeManager {
         }
     }
     
-    public void addPlayerTrade(String uuid, Trade trade) {
+    public void addPlayerTrade(String uuid, Trade trade, boolean alert) {
         Player player = ge.getServer().getPlayer(UUID.fromString(uuid));
         if(playerTradeMap.get(player.getUniqueId().toString()) == null) {
             playerTradeMap.put(player.getUniqueId().toString(), new ArrayList<Trade>());
         }
         playerTradeMap.get(player.getUniqueId().toString()).add(trade);
+        if(alert) {
+            ExchangeHandler.getInstance().getChatHandler().sendChatMessage(player, "Added trade " + (trade.getType()== 0 ? "[\2472BUY\247a]" : "[SELL]") + 
+                    " [\2472" + trade.getQuantity() + "\247a] [\2472" + trade.getItemName() + "\247a] for [\2472" + trade.getPrice() + "\247a] gp");
+        }
+    }
+    
+    public void addPlayerTrade(String uuid, Trade trade) {
+        addPlayerTrade(uuid, trade, false);
     }
 
     public GrandExchange getGrandExchange() {

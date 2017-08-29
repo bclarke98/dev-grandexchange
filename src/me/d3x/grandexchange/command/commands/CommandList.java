@@ -4,11 +4,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import me.d3x.grandexchange.command.AdminCommand;
+import me.d3x.grandexchange.command.ConsoleCommand;
 import me.d3x.grandexchange.command.BaseCommand;
 import me.d3x.grandexchange.trade.TradeManager;
 
-public class CommandList extends BaseCommand implements AdminCommand{
+public class CommandList extends BaseCommand implements ConsoleCommand{
 
     public CommandList(String name) {
         super(name);
@@ -26,7 +26,9 @@ public class CommandList extends BaseCommand implements AdminCommand{
 
 
     @Override
-    public void onPlayerCommand(CommandSender sender, String[] args) {}
+    public void onPlayerCommand(CommandSender sender, String[] args) {
+        
+    }
    
  
     @Override

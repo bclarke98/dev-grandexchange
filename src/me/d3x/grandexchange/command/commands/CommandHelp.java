@@ -1,9 +1,12 @@
 package me.d3x.grandexchange.command.commands;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 import me.d3x.grandexchange.ExchangeHandler;
-import me.d3x.grandexchange.command.AdminCommand;
+import me.d3x.grandexchange.GrandExchange;
+import me.d3x.grandexchange.command.ConsoleCommand;
 import me.d3x.grandexchange.command.BaseCommand;
 
 public class CommandHelp extends BaseCommand{
@@ -11,6 +14,20 @@ public class CommandHelp extends BaseCommand{
 	public CommandHelp(String name) {
 		super(name);
 	}
+	
+	@Override
+	public boolean processCommand(CommandSender sender, String[] args) {
+        if(sender instanceof Player) {
+            onPlayerCommand(sender, args);
+        }else if(sender instanceof ConsoleCommandSender) {
+            for (BaseCommand c : ExchangeHandler.getInstance().getAlphabetizedCommands()) {
+                if(c instanceof ConsoleCommand) {
+                    GrandExchange.print(c.getHelp());
+                }
+            }
+        }
+        return true;
+    }
 
 	@Override
 	public void onPlayerCommand(CommandSender sender, String[] args) {
@@ -25,7 +42,7 @@ public class CommandHelp extends BaseCommand{
 			}
 		}else {
 			for (BaseCommand c : ExchangeHandler.getInstance().getAlphabetizedCommands()) {
-				if(!(c instanceof AdminCommand)) {
+				if(!(c instanceof ConsoleCommand)) {
 				    sendMessageTo(sender, c.getHelp());
 				}
 			}

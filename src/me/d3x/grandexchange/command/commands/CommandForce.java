@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 
 import me.d3x.grandexchange.GrandExchange;
 import me.d3x.grandexchange.ExchangeHandler;
-import me.d3x.grandexchange.command.AdminCommand;
+import me.d3x.grandexchange.command.ConsoleCommand;
 import me.d3x.grandexchange.command.BaseCommand;
 
-public class CommandForce extends BaseCommand implements AdminCommand{
+public class CommandForce extends BaseCommand implements ConsoleCommand{
 
     public CommandForce(String name) {
         super(name);

@@ -118,7 +118,6 @@ public class ExchangeHandler implements Listener{
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-	    System.out.println(TradeManager.getInstance().getCollectableTrades().get(event.getPlayer().getUniqueId().toString()));
 		if(TradeManager.getInstance().getCollectableTrades().get(event.getPlayer().getUniqueId().toString()) != null) {
             chatHandler.sendChatMessage(event.getPlayer(), "One of your trades has been completed.");
             chatHandler.sendChatMessage(event.getPlayer(), "Use \"/ge collect\" to collect.");
