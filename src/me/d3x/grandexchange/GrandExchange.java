@@ -3,6 +3,7 @@ package me.d3x.grandexchange;
 import java.io.File;
 import java.io.PrintWriter;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.command.ColouredConsoleSender;
@@ -11,8 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.d3x.grandexchange.command.BaseCommand;
 import me.d3x.grandexchange.trade.TradeManager;
 import net.md_5.bungee.api.ChatColor;
-
-import org.bukkit.Material;
 
 public class GrandExchange extends JavaPlugin{
 	

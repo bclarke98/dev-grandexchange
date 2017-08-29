@@ -3,6 +3,7 @@ name: GrandExchange
 version: 1.0
 author: OverlySalty
 description: Player-to-Player exchange service based off of the RuneScape Grand Exchange
+depend: [Zen]
 commands:
   ge:
     description: opens Grand Exchange interface

@@ -19,6 +19,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import com.kirik.zen.core.Zen;
+import com.kirik.zen.economy.Economy;
+
 import me.d3x.grandexchange.command.BaseCommand;
 import me.d3x.grandexchange.gui.GuiInventory;
 import me.d3x.grandexchange.trade.TradeManager;
@@ -42,6 +45,8 @@ public class ExchangeHandler implements Listener{
 	}
 	
     private GrandExchange ge;
+    private Zen zen;
+    private Economy zenEco;
     private GuiInventory gui;
 	private HashMap<String, BaseCommand> commands;
 	private ArrayList<BaseCommand> alphabetizedCommands = null;
@@ -75,6 +80,8 @@ public class ExchangeHandler implements Listener{
 	
 	public void loadCommands(GrandExchange ge) {
         this.ge = ge;
+        this.zen = (Zen) ge.getServer().getPluginManager().getPlugin("Zen");
+        this.zenEco = new Economy(this.zen);
         this.gui = new GuiInventory(ge);
 		this.commands = initializeFromJar("plugins/GrandExchange.jar", "me/d3x/grandexchange/command/commands");
 		GrandExchange.print("Loaded commands...");
@@ -147,8 +154,8 @@ public class ExchangeHandler implements Listener{
             gui.handlePriceInventory(event, (Player) event.getWhoClicked(), event.getCurrentItem());
         }
 	}
-	
-	public HashMap<String, BaseCommand> getCommands(){
+	 
+	public HashMap<String, BaseCommand> getCommands(){ 
 		return this.commands;
 	}
     
@@ -162,6 +169,10 @@ public class ExchangeHandler implements Listener{
     
     public ChatHandler getChatHandler() {
     	return this.chatHandler;
+    } 
+    
+    public Economy getEco() {
+        return this.zenEco;
     }
     
     

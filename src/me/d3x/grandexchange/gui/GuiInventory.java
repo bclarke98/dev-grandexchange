@@ -45,6 +45,9 @@ public class GuiInventory{
         ItemStack buy = new ItemStack(Material.LIME_SHULKER_BOX, 1);
         ItemMeta buyMeta = buy.getItemMeta();
         buyMeta.setDisplayName("Buy");
+        ArrayList<String> buyLore = new ArrayList<String>();
+        buyLore.add("Disabled. Please use /ge buy instead.");
+        buyMeta.setLore(buyLore);
         buy.setItemMeta(buyMeta);
         mainInventory.setItem(7, buy);
         
@@ -289,6 +292,12 @@ public class GuiInventory{
         qInv.setItem(6, rTenStack);
         qInv.setItem(7, removeStack);
         return qInv;
+    }
+    
+    private Inventory createListInventory() {
+        Inventory tInv = ge.getServer().createInventory(null, 9, ExchangeHandler.getInstance().getChatHandler().shortPrefix() + "Trade Menu");
+        
+        return tInv;
     }
     
     public void removeFromInventory(Player player, Inventory inventory, String material, int itemsLeftToRemove) {

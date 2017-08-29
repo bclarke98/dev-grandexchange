@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.UUID;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,9 +15,6 @@ import me.d3x.grandexchange.ExchangeHandler;
 import me.d3x.grandexchange.GrandExchange;
 
 public class TradeManager {
-    
-    //TODO create CommandCancel
-    //TODO save/load collectionsMap
 
     private static volatile TradeManager instance;
 
@@ -74,8 +72,30 @@ public class TradeManager {
         try {
             collectableTradeMap = new HashMap<String, ArrayList<CollectableTrade>>();
             File collectionsData = new File(ge.getDataFolder() + "/trade/collections.dat");
+            int totalCollections = 0;
             Scanner reader = new Scanner(collectionsData);
-            
+            while(reader.hasNextLine()) {
+                String curline = reader.nextLine();
+                String[] as = curline.split("/");
+                if(as.length > 3) {
+                    totalCollections++;
+                    String uuid = as[0];
+                    String itemName = as[1];
+                    int itemCount = Integer.parseInt(as[2]);
+                    ItemStack [] itemPayout = null;
+                    if(itemCount > 0) {
+                        itemPayout = new ItemStack[itemCount / 64 + 1];
+                        int itemsLeft = itemCount;
+                        for(int i = 0; i < itemPayout.length; i++) {
+                            itemPayout[i] = itemsLeft > 64 ? new ItemStack(Material.getMaterial(itemName), 64) : new ItemStack(Material.getMaterial(itemName), itemsLeft);
+                            itemsLeft -= 64;
+                        }
+                    }
+                    double moneyPayout = Double.parseDouble(as[3]);
+                    addNewCollectableTrade(uuid, itemName, itemPayout, moneyPayout);
+                }
+            }
+            GrandExchange.print("Total collectable trades loaded: " + totalCollections);
             reader.close();
         }catch(Exception e) {
             e.printStackTrace();
@@ -195,6 +215,10 @@ public class TradeManager {
     
     public HashMap<String, ArrayList<CollectableTrade>> getCollectableTrades() {
         return this.collectableTradeMap;
+    }
+    
+    public HashMap<String, ArrayList<Trade>> getPlayerTradeMap() {
+        return this.playerTradeMap;
     }
     
     public void addNewCollectableTrade(String uuid, String itemName, ItemStack[] itemPayout, double moneyPayout) {

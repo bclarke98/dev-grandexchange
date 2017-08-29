@@ -14,6 +14,22 @@ public class CollectableTrade {
     private ItemStack[] itemPayout;
     private int itemCount;
     private double moneyPayout;
+    private boolean cancelled;
+    
+    public CollectableTrade(String uuid, String itemName, ItemStack[] itemPayout, double moneyPayout, boolean canceled) {
+        this.uuid = uuid;
+        this.itemName = itemName;
+        this.itemPayout = itemPayout;
+        this.itemCount = 0;
+        if(itemPayout != null) {
+            for(ItemStack i : this.itemPayout) {
+                itemCount += i.getAmount();
+            }
+        }
+        this.moneyPayout = moneyPayout;
+        ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "One of your trades has been " + (cancelled ? "cancelled." : "completed."));
+        ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "Use \"/ge collect\" to collect.");
+    }
     
     public CollectableTrade(String uuid, String itemName, ItemStack[] itemPayout, double moneyPayout) {
         this.uuid = uuid;
@@ -26,6 +42,7 @@ public class CollectableTrade {
             }
         }
         this.moneyPayout = moneyPayout;
+        this.cancelled = false;
         ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "One of your trades has been completed.");
         ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "Use \"/ge collect\" to collect.");
     }
@@ -37,14 +54,14 @@ public class CollectableTrade {
                 total += i.getAmount();
                 getPlayer().getInventory().addItem(i);
             }
-            ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "You have purchased " + total + " " + itemName);
+            ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), this.cancelled ? ("You have been refunded " + total + " " + itemName) : ("You have purchased " + total + " " + itemName));
             if(this.moneyPayout >= 1) {
-                //pay player
+                ExchangeHandler.getInstance().getEco().addToBalance(getPlayer(), (int) moneyPayout);
                 ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "You have been refunded " + moneyPayout + "gp");
             }
         }else {
-            //pay player
-            ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "You have been paid " + moneyPayout + "gp for selling " + itemName);
+            ExchangeHandler.getInstance().getEco().addToBalance(getPlayer(), (int) moneyPayout);
+            ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), this.cancelled ? ("You have been refunded" + moneyPayout + "gp") : ("You have been paid " + moneyPayout + "gp for selling " + itemName));
         }
     }
     

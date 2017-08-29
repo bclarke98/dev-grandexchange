@@ -70,6 +70,25 @@ public class Trade {
             this.originalQuantity = this.quantity;
         }
     }
+    
+    public void cancel() {
+        int delta = this.quantity;
+        if(this.getType() == 1) {
+            ItemStack[] items = new ItemStack[delta / 64 + 1];
+            int itemsLeft = delta;
+            for(int i = 0; i < items.length; i++) {
+                items[i] = itemsLeft > 64 ? new ItemStack(Material.getMaterial(itemName), 64) : new ItemStack(Material.getMaterial(itemName), itemsLeft);
+                itemsLeft -= 64;
+            }
+            double offset = this.getUnitPrice();
+            double excess = offset * delta;
+            //double buyPrice = (this.getUnitPrice() * delta) - ((excess > 0) ? excess : 0);
+            TradeManager.getInstance().addNewCollectableTrade(this.sellerUID, itemName, items, excess);
+        }else {
+            TradeManager.getInstance().addNewCollectableTrade(this.sellerUID, itemName, null, this.getUnitPrice() * delta);
+        }
+        
+    }
 
 	public double getPrice() {
 		return price;
@@ -95,6 +114,10 @@ public class Trade {
 	 */
     public boolean canCompleteTrade(Trade other){
         return this.getType() != other.getType() && (this.getType() == 0 ? this.compareTo(other) >= 0 : this.compareTo(other) <= 0);
+    }
+    
+    public String getText() {
+        return (getType()== 0 ? "[\2472BUY\247a]" : "[SELL]") + " [\2472" + getQuantity() + "\247a] [\2472" + getItemName() + "\247a] for [\2472" + getPrice() + "\247a] gp";
     }
 
     
