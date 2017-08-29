@@ -221,11 +221,28 @@ public class TradeManager {
         return this.playerTradeMap;
     }
     
+    public HashMap<String, ArrayList<ArrayList<Trade>>> getTradeMap(){
+        return this.tradeMap;
+    }
+    
+    public void removeFromTradeMap(Trade t) {
+        if(tradeMap.get(t.getItemName()) != null) {
+            ArrayList<Trade> list = tradeMap.get(t.getItemName()).get(t.getType());
+            if(list.remove(t)) {
+                System.out.println("Successful removal");
+            }
+        }
+    }
+    
     public void addNewCollectableTrade(String uuid, String itemName, ItemStack[] itemPayout, double moneyPayout) {
+        addNewCollectableTrade(uuid, itemName, itemPayout, moneyPayout, false);
+    }
+    
+    public void addNewCollectableTrade(String uuid, String itemName, ItemStack[] itemPayout, double moneyPayout, boolean cancelled) {
         Player player = ge.getServer().getPlayer(UUID.fromString(uuid));
         if(this.collectableTradeMap.get(player.getUniqueId().toString()) == null) {
             this.collectableTradeMap.put(player.getUniqueId().toString(), new ArrayList<CollectableTrade>());
         }
-        this.collectableTradeMap.get(player.getUniqueId().toString()).add(new CollectableTrade(uuid, itemName, itemPayout, moneyPayout));
+        this.collectableTradeMap.get(player.getUniqueId().toString()).add(new CollectableTrade(uuid, itemName, itemPayout, moneyPayout, cancelled));
     }
 }

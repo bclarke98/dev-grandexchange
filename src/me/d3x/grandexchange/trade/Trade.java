@@ -83,9 +83,9 @@ public class Trade {
             double offset = this.getUnitPrice();
             double excess = offset * delta;
             //double buyPrice = (this.getUnitPrice() * delta) - ((excess > 0) ? excess : 0);
-            TradeManager.getInstance().addNewCollectableTrade(this.sellerUID, itemName, items, excess);
+            TradeManager.getInstance().addNewCollectableTrade(this.sellerUID, itemName, items, excess, true);
         }else {
-            TradeManager.getInstance().addNewCollectableTrade(this.sellerUID, itemName, null, this.getUnitPrice() * delta);
+            TradeManager.getInstance().addNewCollectableTrade(this.sellerUID, itemName, null, this.getUnitPrice() * delta, true);
         }
         
     }

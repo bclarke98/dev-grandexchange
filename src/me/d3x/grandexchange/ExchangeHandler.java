@@ -153,6 +153,9 @@ public class ExchangeHandler implements Listener{
 		if(event.getInventory().equals(gui.priceInventories.get((Player)(event.getWhoClicked()))) && event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)){
             gui.handlePriceInventory(event, (Player) event.getWhoClicked(), event.getCurrentItem());
         }
+		if(event.getInventory().equals(gui.tradeInventories.get((Player)(event.getWhoClicked()))) && event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR)){
+		    gui.handleTradesInventory(event, (Player) event.getWhoClicked(), event.getCurrentItem());
+		}
 	}
 	 
 	public HashMap<String, BaseCommand> getCommands(){ 
@@ -161,6 +164,10 @@ public class ExchangeHandler implements Listener{
     
     public GrandExchange getGrandExchange(){
         return this.ge;
+    }
+    
+    public GuiInventory getGui() {
+        return this.gui;
     }
     
     public Player getPlayerByUUID(UUID uuid) {

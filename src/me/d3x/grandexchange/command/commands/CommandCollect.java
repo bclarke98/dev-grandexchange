@@ -16,6 +16,7 @@ public class CommandCollect extends BaseCommand{
     @Override
     public void onPlayerCommand(CommandSender sender, String[] args) {
         if(TradeManager.getInstance().getCollectableTrades().get(((Player)(sender)).getUniqueId().toString()) != null) {
+            System.out.println(TradeManager.getInstance().getCollectableTrades().get(((Player)(sender)).getUniqueId().toString()));
             for(CollectableTrade ct : TradeManager.getInstance().getCollectableTrades().get(((Player)(sender)).getUniqueId().toString())) {
                 ct.collect();
             }

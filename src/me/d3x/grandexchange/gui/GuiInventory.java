@@ -13,6 +13,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.d3x.grandexchange.ExchangeHandler;
 import me.d3x.grandexchange.GrandExchange;
 import me.d3x.grandexchange.command.PartialCommand;
+import me.d3x.grandexchange.trade.Trade;
+import me.d3x.grandexchange.trade.TradeManager;
 
 public class GuiInventory{
     
@@ -22,15 +24,18 @@ public class GuiInventory{
     public HashMap<Player, Inventory> buyInventories;
     public HashMap<Player, Inventory> quantityInventories;
     public HashMap<Player, Inventory> priceInventories;
+    public HashMap<Player, Inventory> tradeInventories;
     public HashMap<Player, PartialCommand> commands;
     
     public GuiInventory(GrandExchange ge) {
         this.ge = ge;
-        sellInventories = new HashMap<Player, Inventory>();
-        buyInventories = new HashMap<Player, Inventory>();
-        quantityInventories = new HashMap<Player, Inventory>();
-        priceInventories = new HashMap<Player, Inventory>();
-        commands = new HashMap<Player, PartialCommand>();
+        //setting initial capacities to 1 to reduce overhead... not sure if it'll affect much
+        sellInventories = new HashMap<Player, Inventory>(1);
+        buyInventories = new HashMap<Player, Inventory>(1);
+        quantityInventories = new HashMap<Player, Inventory>(1);
+        priceInventories = new HashMap<Player, Inventory>(1);
+        tradeInventories = new HashMap<Player, Inventory>(1);
+        commands = new HashMap<Player, PartialCommand>(1);
         createMainInventory();
     }
     
@@ -173,7 +178,24 @@ public class GuiInventory{
             }
             player.closeInventory();
         }
-        
+    }
+    
+    public void openTradesInventory(Player player) {
+        player.closeInventory();
+        tradeInventories.put(player, createListInventory(player));
+        player.openInventory(tradeInventories.get(player));
+    }
+    
+    public void handleTradesInventory(InventoryClickEvent event, Player player, ItemStack clicked) {
+        event.setCancelled(true);
+        int index = event.getSlot();
+        ArrayList<Trade> trades = TradeManager.getInstance().getPlayerTradeMap().get(player.getUniqueId().toString());
+        if(trades != null && index < trades.size()) {
+            trades.get(index).cancel();
+            Trade t = trades.remove(index);
+            TradeManager.getInstance().removeFromTradeMap(t);
+            player.closeInventory();
+        }
     }
     
     private Inventory createQuantityInventory(Player player, ItemStack clicked){
@@ -294,9 +316,25 @@ public class GuiInventory{
         return qInv;
     }
     
-    private Inventory createListInventory() {
-        Inventory tInv = ge.getServer().createInventory(null, 9, ExchangeHandler.getInstance().getChatHandler().shortPrefix() + "Trade Menu");
-        
+    private Inventory createListInventory(Player player) {
+        ArrayList<Trade> tradeList = TradeManager.getInstance().getPlayerTradeMap().get(player.getUniqueId().toString());
+        int amt = ((tradeList.size() - 1 / 9) + 1) * 9;
+        Inventory tInv = ge.getServer().createInventory(null, amt, ExchangeHandler.getInstance().getChatHandler().shortPrefix() + "Trade Menu");
+        if(tradeList != null) {
+            for(int i = 0; i < tradeList.size(); i++) {
+                Trade t = tradeList.get(i);
+                ItemStack item = new ItemStack(Material.getMaterial(t.getItemName()));
+                ItemMeta meta = item.getItemMeta();
+                ArrayList<String> loreList = new ArrayList<String>();
+                loreList.add(t.getType() == 0 ? "\2479\247l[ BUY ]" : "\2479\247l[ SELL ]");
+                loreList.add("\2477Price: " + t.getPrice() + "gp");
+                loreList.add("\2477Quantity: " + t.getQuantity());
+                loreList.add("\2474Click to cancel trade.");
+                meta.setLore(loreList);
+                item.setItemMeta(meta);
+                tInv.setItem(i, item);
+            }
+        }
         return tInv;
     }
     

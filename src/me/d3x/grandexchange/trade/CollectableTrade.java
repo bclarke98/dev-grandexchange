@@ -27,23 +27,8 @@ public class CollectableTrade {
             }
         }
         this.moneyPayout = moneyPayout;
+        this.cancelled = canceled;
         ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "One of your trades has been " + (cancelled ? "cancelled." : "completed."));
-        ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "Use \"/ge collect\" to collect.");
-    }
-    
-    public CollectableTrade(String uuid, String itemName, ItemStack[] itemPayout, double moneyPayout) {
-        this.uuid = uuid;
-        this.itemName = itemName;
-        this.itemPayout = itemPayout;
-        this.itemCount = 0;
-        if(itemPayout != null) {
-            for(ItemStack i : this.itemPayout) {
-                itemCount += i.getAmount();
-            }
-        }
-        this.moneyPayout = moneyPayout;
-        this.cancelled = false;
-        ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "One of your trades has been completed.");
         ExchangeHandler.getInstance().getChatHandler().sendChatMessage(getPlayer(), "Use \"/ge collect\" to collect.");
     }
     
