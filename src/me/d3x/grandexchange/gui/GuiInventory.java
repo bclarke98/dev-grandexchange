@@ -47,6 +47,12 @@ public class GuiInventory{
         help.setItemMeta(helpMeta);
         mainInventory.setItem(0, help);
         
+        ItemStack list = new ItemStack(Material.CYAN_SHULKER_BOX, 1);
+        ItemMeta listMeta = list.getItemMeta();
+        listMeta.setDisplayName("List Trades");
+        list.setItemMeta(listMeta);
+        mainInventory.setItem(6, list);
+        
         ItemStack buy = new ItemStack(Material.LIME_SHULKER_BOX, 1);
         ItemMeta buyMeta = buy.getItemMeta();
         buyMeta.setDisplayName("Buy");
@@ -73,6 +79,10 @@ public class GuiInventory{
         if(clicked.getType().equals(Material.LIME_SHULKER_BOX)) {
             player.closeInventory();
             commands.put(player, new PartialCommand(player, 0));
+        }
+        if(clicked.getType().equals(Material.CYAN_SHULKER_BOX)) {
+            player.closeInventory();
+            openTradesInventory(player);
         }
         if(clicked.getType().equals(Material.RED_SHULKER_BOX)) {
             player.closeInventory();
