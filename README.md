@@ -1,1 +1,1 @@
-# Grand Exchange Plugin
+# Grand Exchange Minecraft Plugin (INACTIVE)
